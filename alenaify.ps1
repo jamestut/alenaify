@@ -86,7 +86,7 @@ function Alenaify-Stop-Process {
     $Name
   )
   if ($online) {
-    pskill -nobanner -t $Name
+    pskill -accepteula -nobanner -t $Name
   }
 }
 
@@ -335,6 +335,7 @@ if ($Actions.Count -eq 0) {
 
 # if online, we need the dependencies and the privilege
 if ($Online) {
+  throw "Online mode not supported in this version."
   Check-Dependencies -Deps pskill, psexec
   if (-Not ($SkipPrivCheck)) {
     if (-Not (Is-System)) {
