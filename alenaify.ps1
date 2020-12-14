@@ -249,6 +249,12 @@ function Action-RemoveWinsat {
   Alenaify-Remove-File -RelativePath "Windows\System32\WinSAT.exe"
 }
 
+function Action-RemoveDeviceSetupManager {
+  Write-Host "Removing Device Setup Manager ..."
+  Alenaify-Disable-Service -Name "DsmSvc" -ErrorAction Continue
+  Alenaify-Remove-File -RelativePath "Windows\System32\DeviceSetupManager.dll"
+}
+
 function Action-RemoveCompatTelemetry {
   Write-Host "Removing Windows Compatibility Telemetry ..."
   Alenaify-Stop-Process -Name "CompatTelRunner.exe"
@@ -302,6 +308,7 @@ $AvailActions = @{
   RemoveSecurityCenter     = 'Action-RemoveSecurityCenter';
   RemoveWinsat             = 'Action-RemoveWinsat';
   RemoveCompatTelemetry    = 'Action-RemoveCompatTelemetry';
+  RemoveDeviceSetupManager = 'Action-RemoveDeviceSetupManager';
   DisableCrashLog          = 'Action-DisableCrashLog';
   DisableSlowServices      = 'Action-DisableSlowServices';
   DisableWinUpdateServices = 'Action-DisableWinUpdateServices';
