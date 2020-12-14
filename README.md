@@ -44,98 +44,58 @@ The first stage of Windows setup will refuse to proceed otherwise. Instead, let 
 The following are actions that will be carried on by Alenaify, explaining their actions, purposes, and caveats (if any).
 
 - `RemoveOneDriveSetup`
-  **Actions:**
-
-  - Removes `OneDriveSetup.exe`.
-
+  **Actions:** Removes `OneDriveSetup.exe`.  
   **Purpose:** Windows 10 installs OneDrive *per user account*. The installer also tax the CPU to 100% for several minutes even on a high end PCs. If you often creates Windows user accounts for testing then the time taken by OneDriveSetup will add up. OneDrive installer for Windows is always downloadable from OneDrive's website.
 
 - `RemoveWaaS`
-  **Actions:**
-
-  - Removes files in System32 folder whose name begins with `WaasMedic`.
-
+  **Actions:** Removes files in System32 folder whose name begins with `WaasMedic`.  
   **Purpose:** The WaaS component is responsible for automatically re-enabling Windows Update service after a certain amount of time. Removing this component will keep Windows Update service stays disabled.
 
 - `RemoveNGenTask`
-  **Actions:**
-
-  - Removes `ngentasklauncher.dll`.
-
-  **Purpose:** NGen can help optimize performance of .NET Framework applications by doing ahead of time compilations. However, it often goes out of hand by hogging the CPU for prolonged amount of time, and it often starts arbitrarily anytime it wishes to start, even when the computer is battery powered.
-  **Caveats: **.NET Framework 4.0 applications won't be AOT-compiled automatically. However, NGen can always be run manually, and many .NET Framework 4.0 based applications will run NGen anyway.
+  **Actions:** Removes `ngentasklauncher.dll`.  
+  **Purpose:** NGen can help optimize performance of .NET Framework applications by doing ahead of time compilations. However, it often goes out of hand by hogging the CPU for prolonged amount of time, and it often starts arbitrarily anytime it wishes to start, even when the computer is battery powered.  
+  **Caveats:** .NET Framework 4.0 applications won't be AOT-compiled automatically. However, NGen can always be run manually, and many .NET Framework 4.0 based applications will run NGen anyway.
 
 - `RemoveDiagSvc`
-  **Actions:**
-
-  - Removes `diagsvc.dll`, `dps.dll`, and `wdi.dll`.
-
-  **Purpose:** These services collects trace data in the background for various system diagnostics and telemetry. Windows troubleshooting utilities also uses these components. They typically doesn't hog CPU that much, but nevertheless still uses a considerable amount of CPU sometimes.
+  **Actions:** Removes `diagsvc.dll`, `dps.dll`, and `wdi.dll`.  
+  **Purpose:** These services collects trace data in the background for various system diagnostics and telemetry. Windows troubleshooting utilities also uses these components. They typically doesn't hog CPU that much, but nevertheless still uses a considerable amount of CPU sometimes.  
   **Caveats:** Windows troubleshooting utilities will not work. Certain Windows features that depends on trace data such as `powercfg /sleepstudy` will not be able to generate the report.
 
 - `RemoveWinDefend`
-  **Actions:**
-
-  - Removes `Program Files\Windows Defender`.
-
-  **Purpose: **Windows Defender Antivirus drastically slows down operations that are disk-bound (IO heavy), such as accessing many files. It also automatically deletes suspected files, even if they're false positive. It's real-time scan feature can only be turned off temporarily, and it occasionally does not obey the "disable real-time scan" configuration from Group Policy.
+  **Actions:** Removes `Program Files\Windows Defender`.  
+  **Purpose:** Windows Defender Antivirus drastically slows down operations that are disk-bound (IO heavy), such as accessing many files. It also automatically deletes suspected files, even if they're false positive. It's real-time scan feature can only be turned off temporarily, and it occasionally does not obey the "disable real-time scan" configuration from Group Policy.
 
 - `RemoveSecurityCenter`
-  **Actions:**
-
-  - Removes `WscSvc.dll`, `SecurityHealthService.exe`, and `SecurityHealthSystray.exe`.
-
-  **Purpose: **Prevent Windows from complaining that no antivirus solution is installed.
-  **Caveats: **Windows Security Center settings will not work.
+  **Actions:** Removes `WscSvc.dll`, `SecurityHealthService.exe`, and `SecurityHealthSystray.exe`.  
+  **Purpose:** Prevent Windows from complaining that no antivirus solution is installed.  
+  **Caveats:** Windows Security Center settings will not work.
 
 - `RemoveWinsat`
-  **Actions:**
-
-  - Removes `WinSat.exe`.
-
-  **Purpose: **WinSAT is a benchmarking tool introduced in Vista, but deprecated in Windows 8.1 and discontinued in Windows 10. Windows 10 does not even include a means to access WinSAT data, yet WinSAT is still configured to run when the computer is idle. As a benchmarking tool, it will of course stress the components that it measures.
+  **Actions:** Removes `WinSat.exe`.  
+  **Purpose:** WinSAT is a benchmarking tool introduced in Vista, but deprecated in Windows 8.1 and discontinued in Windows 10. Windows 10 does not even include a means to access WinSAT data, yet WinSAT is still configured to run when the computer is idle. As a benchmarking tool, it will of course stress the components that it measures.
 
 - `RemoveDeviceSetupManager`
-  **Actions:**
-
-  - Removes `DeviceSetupManager.dll`
-
-  **Purpose: **Device Setup Manager is responsible for automatically installing and updating drivers and its associated store applications (for UWD/DCH drivers) without user's confirmation. For some hardware that requires customized drivers with custom configuration, this has the potential to overwrite those configurations with the generic one. You can disable Windows Update service as well to disable this behaviour, but then you will lose access to Windows Store. Device drivers can still be automatically obtained from Windows Update by using Device Manager.
+  **Actions:** Removes `DeviceSetupManager.dll`  
+  **Purpose:** Device Setup Manager is responsible for automatically installing and updating drivers and its associated store applications (for UWD/DCH drivers) without user's confirmation. For some hardware that requires customized drivers with custom configuration, this has the potential to overwrite those configurations with the generic one. You can disable Windows Update service as well to disable this behaviour, but then you will lose access to Windows Store. Device drivers can still be automatically obtained from Windows Update by using Device Manager.
 
 - `RemoveCompatTelemetry`
-  **Actions:**
-
-  - Removes `CompatTelRunner.exe`
-
-  **Purpose: **The Compatibility Telemetry collects information about installed applications in your system and sending this information to Microsoft for analytical purposes. This process often runs arbitrarily at any time, and it consumes a considerable amount of CPU time.
+  **Actions:** Removes `CompatTelRunner.exe`  
+  **Purpose:** The Compatibility Telemetry collects information about installed applications in your system and sending this information to Microsoft for analytical purposes. This process often runs arbitrarily at any time, and it consumes a considerable amount of CPU time.
 
 - `DisableCrashLog`
-  **Actions:**
-
-  - Set the `Control\CrashControl\EnableLogFile` registry value to 0.
-
-  **Purpose: **Disables minidump actions log (upon crashes, dump files will still be collected). In certain revisions of Windows 10 version 2004/20H2, it a bug that slows down the system when this feature is enabled.
+  **Actions:** Set the `Control\CrashControl\EnableLogFile` registry value to 0.  
+  **Purpose:** Disables minidump actions log (upon crashes, dump files will still be collected). In certain revisions of Windows 10 version 2004/20H2, it a bug that slows down the system when this feature is enabled.
 
 - `DisableSlowServices`
-  **Actions:**
-
-  - Disable the "Windows Search" and "SysMain" (formerly known as "SuperFetch") services.
-
-  **Purpose: **Windows Search does full text indexing on your document's contents in the background, which consumes both CPU time and disk IO capacity. SysMain creates caches for launched applications, supposedly to speed up boot process, but in reality it only creates memory and disk space overhead (up to 1 GB in some cases), while actually detrimental to boot speed performance on SSD boot drives.
-  **Caveat: ** Windows' built-in full text indexing no longer works. Search by file name still works fine, and so does content-based search (only the latter will perform slowly due to the lack of indexes).
+  **Actions:** Disable the "Windows Search" and "SysMain" (formerly known as "SuperFetch") services.  
+  **Purpose:** Windows Search does full text indexing on your document's contents in the background, which consumes both CPU time and disk IO capacity. SysMain creates caches for launched applications, supposedly to speed up boot process, but in reality it only creates memory and disk space overhead (up to 1 GB in some cases), while actually detrimental to boot speed performance on SSD boot drives.  
+  **Caveat:** Windows' built-in full text indexing no longer works. Search by file name still works fine, and so does content-based search (only the latter will perform slowly due to the lack of indexes).
 
 - `DisableWinUpdateConfig`
-  **Actions:**
+  **Actions:** Set the following Windows Update registry settings to "1": `ExcludeWUDriversInQualityUpdate`, `NoAutoUpdate`, `AUOptions`, `UseWUServer`. Also set `WUServer` to `http://nonexistent`.  
+  **Purpose:** Prevents Windows Update from automatically update the Windows and installing drivers (some drivers will still be automatically installed, especially GPU drivers, unless the `RemoveDeviceSetupManager` action is also performed), even when Windows Update service is running. Updates can still be installed manually.
 
-  - Set the following Windows Update registry settings to "1": `ExcludeWUDriversInQualityUpdate`, `NoAutoUpdate`, `AUOptions`, `UseWUServer`.
-  - Set `WUServer` to `http://nonexistent`.
-
-  **Purpose: **Prevents Windows Update from automatically update the Windows and installing drivers (some drivers will still be automatically installed, especially GPU drivers, unless the `RemoveDeviceSetupManager` action is also performed), even when Windows Update service is running. Updates can still be installed manually.
-
-- `DisableWinUpdateServices`
-  **Actions:**
-
-  - Disable "Windows Update" service.
-
-  **Purpose: **Prevents APPX Deployment Service from running. It is best to exclude this action if the `DisableWinUpdateConfig` and `RemoveDeviceSetupManager` is also performed.
-  **Caveats: **Disables Windows Store installation and updates and prevents add optional features from working.
+- `DisableWinUpdateServices`  
+  **Actions:** Disable "Windows Update" service.  
+  **Purpose:** Prevents APPX Deployment Service from running. It is best to exclude this action if the `DisableWinUpdateConfig` and `RemoveDeviceSetupManager` is also performed.  
+  **Caveats:** Disables Windows Store installation and updates and prevents add optional features from working.
