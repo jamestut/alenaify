@@ -47,6 +47,10 @@ The following are actions that will be carried on by Alenaify, explaining their 
   **Actions:** Removes `OneDriveSetup.exe`.  
   **Purpose:** Windows 10 installs OneDrive *per user account*. The installer also tax the CPU to 100% for several minutes even on a high end PCs. If you often creates Windows user accounts for testing then the time taken by OneDriveSetup will add up. OneDrive installer for Windows is always downloadable from OneDrive's website.
 
+- `RemoveRemoveSmartScreen`  
+  **Actions:** Removes `smartscreen.exe`.  
+  **Purpose:** Windows SmartScreen will create a checksum of a downloaded file everytime the file gets opened from Windows Explorer, which will cause significant delay for large files downloaded from the internet.
+
 - `RemoveWaaS`  
   **Actions:** Removes files in System32 folder whose name begins with `WaasMedic`.  
   **Purpose:** The WaaS component is responsible for automatically re-enabling Windows Update service after a certain amount of time. Removing this component will keep Windows Update service stays disabled.

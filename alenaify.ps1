@@ -198,6 +198,11 @@ function Action-RemoveOneDriveSetup {
   Alenaify-Remove-File -RelativePath "Windows\SysWOW64\OneDriveSetup.exe"
 }
 
+function Action-RemoveSmartScreen {
+  Write-Host "Removing SmartScreen ..."
+  Alenaify-Remove-File -RelativePath "Windows\System32\smartscreen.exe"
+}
+
 function Action-RemoveWaaS {
   Write-Host "Removing WaaS Medic ..."
   $filelist = @('WaaSMedicAgent.exe', 'WaaSMedicCapsule.dll', 'WaaSMedicPS.dll', 'WaaSMedicSvc.dll')
@@ -301,6 +306,7 @@ function Action-DisableWinUpdateConfig {
 # get list of actions to execute
 $AvailActions = @{ 
   RemoveOneDriveSetup      = 'Action-RemoveOneDriveSetup'; 
+  RemoveSmartScreen        = 'Action-RemoveSmartScreen'; 
   RemoveWaaS               = 'Action-RemoveWaaS';
   RemoveNGenTask           = 'Action-RemoveNGenTask';
   RemoveDiagSvc            = 'Action-RemoveDiagSvc';
