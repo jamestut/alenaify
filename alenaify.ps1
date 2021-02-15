@@ -37,7 +37,7 @@ function Check-Dependencies {
     $Deps
   )
   foreach ($dep in $Deps) {
-    if ($null -eq (Get-Command $dep -ErrorAction SilentlyContinue)) {
+    if ($null -eq (Get-Command .\$dep -ErrorAction SilentlyContinue)) {
       Write-Host "Unable to find $dep.exe"
       Write-Host "Ensure that the following programs are in the same folder or PATH:"
       foreach ($dep2 in $Deps) {
@@ -86,7 +86,7 @@ function Alenaify-Stop-Process {
     $Name
   )
   if ($online) {
-    pskill -accepteula -nobanner -t $Name
+    .\pskill64 -accepteula -nobanner -t $Name
   }
 }
 
@@ -200,11 +200,13 @@ function Action-RemoveOneDriveSetup {
 
 function Action-RemoveSmartScreen {
   Write-Host "Removing SmartScreen ..."
+  Alenaify-Stop-Process -Name "smartscreen.exe"
   Alenaify-Remove-File -RelativePath "Windows\System32\smartscreen.exe"
 }
 
 function Action-RemoveWaaS {
   Write-Host "Removing WaaS Medic ..."
+  Alenaify-Stop-Process -Name 'WaaSMedicAgent.exe'
   $filelist = @('WaaSMedicAgent.exe', 'WaaSMedicCapsule.dll', 'WaaSMedicPS.dll', 'WaaSMedicSvc.dll')
   foreach ($filename in $filelist) {
     Alenaify-Remove-File -RelativePath "Windows\System32\$filename"
@@ -218,7 +220,7 @@ function Action-RemoveNGenTask {
 
 function Action-RemoveDiagSvc {
   Write-Host "Removing Diagnostic Services ..."
-  $svclist = @('diagsvc', 'diagsvc', 'WdiServiceHost', 'WdiSystemHost')
+  $svclist = @('diagsvc', 'dps', 'WdiServiceHost', 'WdiSystemHost')
   foreach ($svc in $svclist) {
     Alenaify-Stop-Service -Name $svc -ErrorAction Continue
     Alenaify-Disable-Service -Name $svc -ErrorAction Continue
@@ -256,6 +258,7 @@ function Action-RemoveWinsat {
 
 function Action-RemoveDeviceSetupManager {
   Write-Host "Removing Device Setup Manager ..."
+  Alenaify-Stop-Service -Name "DsmSvc" -ErrorAction Continue
   Alenaify-Disable-Service -Name "DsmSvc" -ErrorAction Continue
   Alenaify-Remove-File -RelativePath "Windows\System32\DeviceSetupManager.dll"
 }
@@ -275,6 +278,7 @@ function Action-DisableSlowServices {
   Write-Host "Disable slow services ..."
   $serviceslist = @("WSearch", "SysMain")
   foreach ($svc in $serviceslist) {
+    Alenaify-Stop-Service -Name $svc
     Alenaify-Disable-Service -Name $svc
   }
 }
@@ -348,13 +352,13 @@ if ($Actions.Count -eq 0) {
 
 # if online, we need the dependencies and the privilege
 if ($Online) {
-  throw "Online mode not supported in this version."
-  Check-Dependencies -Deps pskill, psexec
+  cd $PSScriptRoot
+  Check-Dependencies -Deps pskill64, powerrun_x64
   if (-Not ($SkipPrivCheck)) {
     if (-Not (Is-System)) {
       # raise to system
       Write-Host "Restarting as SYSTEM privilege ..."
-      psexec -s -accepteula powershell -ExecutionPolicy Unrestricted $PSCommandPath -Online -SkipPrivCheck -Include ($Actions.Keys -join ",")
+      .\powerrun_x64 powershell.exe -ExecutionPolicy Unrestricted $PSCommandPath -Online -SkipPrivCheck -Include ($Actions.Keys -join ",")
     }
     exit
   }
@@ -394,4 +398,9 @@ finally {
     Alenaify-UnmountReg -Hive $SystemHivePath
     Alenaify-UnmountReg -Hive $SoftwareHivePath
   }
+}
+
+# pause so user can see the result
+if ($Online -and $SkipPrivCheck) {
+  pause
 }
