@@ -9,6 +9,12 @@ In addition, even after running all the actions, you can still expect the full W
 
 This utility requires PowerShell and has to be run on a Windows installation. The version 5.1 of PowerShell bundled in recent versions of Windows 10 will do. For online operations, this utility additionally requires `psexec64` from [Microsoft SysInternals](https://live.sysinternals.com) and `PowerRun_x64` from [Sordum](https://www.sordum.org/9416/powerrun-v1-4-run-with-highest-privileges/).
 
+## System Requirements
+
+Alenaify will only run on Windows 10 Anniversary Update (version 1607) or later. However, Alenaify can be applied to the initial release of Windows 10 (version 1507).
+
+Only x64 version of Windows 10 are supported, both for execution and target. **ARM and 32-bit Windows 10 are not supported**: running Alenaify on those versions of Windows will lead to an undefined behaviour.
+
 ## Usage
 
 Mount or connect the disk that contains a Windows 10 installation, and run the following in PowerShell:
