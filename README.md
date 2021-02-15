@@ -1,26 +1,29 @@
 # Project Alenaify
 
-Make Windows 10 like Windows 7! This project prevents Windows 10 from doing background tasks when it is idling by removing certain components and configuring certain things. You can expect a much faster Windows 10 system that also saves energy. In this version, it works only on offline image (e.g. a Windows installation that is not currently active).
+Make Windows 10 like Windows 7! This utility prevents Windows 10 from doing background tasks when it is idling by removing certain components and configuring certain things. You can expect a much faster Windows 10 system that also saves energy. This project will work on both offline (a Windows installation that is not currently active) or online (currently running Windows installation).
 
 In addition, even after running all the actions, you can still expect the full Windows 10 experience, including:
 
 - UWP, Windows Store, Xbox, and Store Purchases.
 - Windows Update and DISM.
 
-This tool requires PowerShell and has to be run on a Windows installation. The version 5.1 of PowerShell bundled in recent versions of Windows 10 will do.
+This utility requires PowerShell and has to be run on a Windows installation. The version 5.1 of PowerShell bundled in recent versions of Windows 10 will do. For online operations, this utility additionally requires `psexec64` from [Microsoft SysInternals](https://live.sysinternals.com) and `PowerRun_x64` from [Sordum](https://www.sordum.org/9416/powerrun-v1-4-run-with-highest-privileges/).
 
 ## Usage
 
 Mount or connect the disk that contains a Windows 10 installation, and run the following in PowerShell:
 
 ```
-.\Alenaify.ps1 -image:(Mounted Windows Installation) (actions)
+.\Alenaify.ps1 -image (Mounted Windows Installation) (actions)
+.\Alenaify.ps1 -online (actions)
 ```
 
 Where:
 
-- `(Mounted Windows Installation)`
+- `(Mounted Windows Installation)`  
   Is the root directory where Windows is installed (e.g. the directory that contains the `Windows` and `Program Files` folder to be serviced.
+- `-online`  
+  To alenaify the currently running Windows installation.
 - `(actions)`
   Is one of these:
   - `-all`
