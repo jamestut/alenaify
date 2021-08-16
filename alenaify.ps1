@@ -111,14 +111,24 @@ function Alenaify-Remove-File {
   else {
     $AbsPath = "$Image\$RelativePath"
   }
-  
-  # takeown so that we can modify permission
-  takeown /f $AbsPath
-  # if this is a folder, also do it recursively
-  takeown /f $AbsPath /r /d y
 
-  # icacls to grant the executor of this script full access to the file/folder, recursively
-  icacls $AbsPath /grant *S-1-3-4:F /t
+  # full access to OWNER RIGHTS
+  $NewPerm = "*S-1-3-4:F"
+
+  # takeown, but first,
+  # check if file, folder, or non existent (for cleaner message)
+  if (Test-Path -Path $AbsPath -PathType Leaf) {
+    # file
+    takeown /f $AbsPath
+    icacls $AbsPath /grant $NewPerm
+  } elseif (Test-Path -Path $AbsPath -PathType Container) {
+    # folder
+    takeown /f $AbsPath /r /d y
+    icacls $AbsPath /grant $NewPerm /t
+  } else {
+    Write-Output "File $RelativePath not found. Skipping."
+    return
+  }
 
   Remove-Item -Path $AbsPath -Recurse
 }
@@ -352,7 +362,7 @@ if ($Actions.Count -eq 0) {
 
 # if online, we need the dependencies and the privilege
 if ($Online) {
-  cd $PSScriptRoot
+  Set-Location $PSScriptRoot
   Check-Dependencies -Deps pskill64, powerrun_x64
   if (-Not ($SkipPrivCheck)) {
     if (-Not (Is-System)) {
