@@ -316,6 +316,23 @@ function Action-DisableWinUpdateConfig {
   Alenaify-WriteRegValue -HiveType "SOFTWARE" -Key $AUKey -ValueName "WUServer" -Value "http://nonexistent" -Type "String"
 }
 
+function Action-DisableSpeculativeCtrl {
+  # disable spectre/meltdown mitigation
+  $OSSpecCtrlKey = 'Control\Session Manager\Memory Management'
+  Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $OSSpecCtrlKey -ValueName "FeatureSettingsOverride" -Value 3 -Type "DWORD"
+  Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $OSSpecCtrlKey -ValueName "FeatureSettingsOverrideMask" -Value 3 -Type "DWORD"
+  
+  # disable for Hyper-V as well
+  Alenaify-WriteRegValue -HiveType "SOFTWARE" -Key "Microsoft\Windows NT\CurrentVersion\Virtualization" -ValueName "MinVmVersionForCpuBasedMitigations" -Value "13.0" -Type "String"
+}
+
+function Action-FileSystemTuning {
+  $FSTuneKey = 'Control\FileSystem'
+  Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $FSTuneKey -ValueName "NtfsDisable8dot3NameCreation" -Value 1 -Type "DWORD"
+  Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $FSTuneKey -ValueName "Win95TruncatedExtensions" -Value 0 -Type "DWORD"
+  Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $FSTuneKey -ValueName "NtfsDisableLastAccessUpdate" -Value 0x80000001 -Type "DWORD"
+}
+
 # main script
 # get list of actions to execute
 $AvailActions = @{ 
@@ -333,6 +350,8 @@ $AvailActions = @{
   DisableSlowServices      = 'Action-DisableSlowServices';
   DisableWinUpdateServices = 'Action-DisableWinUpdateServices';
   DisableWinUpdateConfig   = 'Action-DisableWinUpdateConfig';
+  DisableSpeculativeCtrl   = 'Action-DisableSpeculativeCtrl';
+  FileSystemTuning         = 'Action-FileSystemTuning';
 }
 $Actions = @{}
 if (($All) -or ($null -ne $Exclude)) {

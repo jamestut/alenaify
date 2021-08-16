@@ -112,3 +112,12 @@ The following are actions that will be carried on by Alenaify, explaining their 
   **Actions:** Disable "Windows Update" service.  
   **Purpose:** Prevents APPX Deployment Service from running. It is best to exclude this action if the `DisableWinUpdateConfig` and `RemoveDeviceSetupManager` is also performed.  
   **Caveats:** Disables Windows Store installation and updates and prevents add optional features from working.
+
+- `DisableSpeculativeCtrl`  
+  **Actions:** Set registry entries to disable spectre/meltdown mitigations for both Windows and Hyper-V.  
+  **Purpose:** Make system faster by disabling some spectre/meltdown mitigations. Spectre/meltdown is a "side-channel" attack that measures how fast a CPU can process a data, and use this timing information to infer data stored in locations that the attacker normally does not have access to. A popular technique for the "mitigation" is by flushing CPU caches on context switches, thus making things slower. Using this setting turns off such performance-sapping mitigations.
+
+- `FileSystemTuning`  
+  **Actions:** Disable 8dot3 file names generation and disable last access time stamp updates.  
+  **Purpose:** Both 8dot3 file names and last access time stamp updates incurs additional disk writes during file creation and read, respectively. Disabling these improve file system performance drastically, particularly when accessing small files.  
+  **Caveats:** Disabling 8dot3 might prevent legacy programs for running (x86 32-bit Windows only, as such legacy programs cannot run in 64-bit version of Windows). File system last access time stamp is used by Windows Shadow Copy service, thus disabling it might prevent Shadow Copy from functioning properly.
