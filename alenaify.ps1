@@ -299,6 +299,7 @@ function Action-DisableWinUpdateServices {
 }
 
 function Action-DisableWinUpdateConfig {
+  Write-Host "Disable Windows automatic update configurations ..."
   # exclude driver updates
   $NoDriverKeys = @('Microsoft\PolicyManager\current\device\Update', 
     'Microsoft\PolicyManager\default\Update', 
@@ -318,6 +319,7 @@ function Action-DisableWinUpdateConfig {
 
 function Action-DisableSpeculativeCtrl {
   # disable spectre/meltdown mitigation
+  Write-Host "Disable speculative control ..."
   $OSSpecCtrlKey = 'Control\Session Manager\Memory Management'
   Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $OSSpecCtrlKey -ValueName "FeatureSettingsOverride" -Value 3 -Type "DWORD"
   Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $OSSpecCtrlKey -ValueName "FeatureSettingsOverrideMask" -Value 3 -Type "DWORD"
@@ -327,6 +329,7 @@ function Action-DisableSpeculativeCtrl {
 }
 
 function Action-FileSystemTuning {
+  Write-Host "File system tuning ..."
   $FSTuneKey = 'Control\FileSystem'
   Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $FSTuneKey -ValueName "NtfsDisable8dot3NameCreation" -Value 1 -Type "DWORD"
   Alenaify-WriteRegValue -HiveType "SYSTEM" -Key $FSTuneKey -ValueName "Win95TruncatedExtensions" -Value 0 -Type "DWORD"
@@ -414,6 +417,7 @@ else {
 
 try {
   foreach ($action in $Actions.Keys) {
+    Write-Host "--------------------------------"
     try {
       &$AvailActions[$action]
     }
